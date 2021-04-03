@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  wordpress:
+    container_name: "local-wordpress-demo"
+    depends_on:
+      - database
+    image: "wordpress:latest"
+    restart: always
+    ports:
+      - "8222:80"
+    environment:
+      WORDPRESS_DB_HOST: "database:3306"
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: admin
+      WORDPRESS_DB_NAME: localwordpress
+
+    volumes:
+      - "./src:/var/www/html"
+
+  database:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: localwordpress
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    volumes:
+      - localwordpress_database:/var/lib/mysql
+
+volumes:
+  localwordpress_database:
